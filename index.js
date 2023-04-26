@@ -16,20 +16,30 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 const categoriesRouter = require('./routers/categoriesRouter');
-const productsRouter = require('./routers/productsRouter')
-const ordersRouter = require('./routers/ordersRouter')
-const mailRouter = require('./routers/mailRouter')
-const loginRouter = require('./routers/loginRouter')
-
+const productsRouter = require('./routers/productsRouter');
+const ordersRouter = require('./routers/ordersRouter');
+const mailRouter = require('./routers/mailRouter');
+const loginRouter = require('./routers/loginRouter');
 
 mongoose.set('strictQuery', false);
 
+// mongoose
+//   .connect('mongodb://localhost:27017/', {
+//     dbName: 'pool-cosmetics',
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//   })
+//   .then(() => {
+//     console.log('connected to database');
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
+
 mongoose
-  .connect('mongodb://localhost:27017/', {
-    dbName: 'pool-cosmetics',
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(
+    `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.u2hl5.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`
+  )
   .then(() => {
     console.log('connected to database');
   })
@@ -46,7 +56,6 @@ app.use('/api', ordersRouter);
 app.use('/api', mailRouter);
 
 app.use('/api', loginRouter);
-
 
 app.listen(process.env.PORT || 3100, () => {
   console.log(`connected to port 30100`);
